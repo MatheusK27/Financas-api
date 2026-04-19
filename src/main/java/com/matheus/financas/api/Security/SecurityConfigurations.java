@@ -1,4 +1,4 @@
-package com.matheus.financas.api.infra.security;
+package com.matheus.financas.api.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

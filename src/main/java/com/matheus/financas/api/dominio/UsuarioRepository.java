@@ -1,8 +1,9 @@
 package com.matheus.financas.api.dominio;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 
 
 public interface UsuarioRepository  extends JpaRepository<Usuario,Long> {
-    Usuario findByEmail(String email);
+   Usuario findByEmail(String email);
 }

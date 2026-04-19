@@ -2,12 +2,11 @@ package com.matheus.financas.api.Controller;
 
 
 import com.matheus.financas.api.dominio.DadosAutentificacaoLogin;
-import com.matheus.financas.api.dominio.Usuario;
 import com.matheus.financas.api.dominio.UsuarioRepository;
+import com.matheus.financas.api.Security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +24,9 @@ public class AutenticacaoController {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity fazerLogin(@Valid @RequestBody DadosAutentificacaoLogin dados ) {
         var usuario = repository.findByEmail(dados.email());
@@ -36,7 +38,9 @@ public class AutenticacaoController {
 
         }
 
-        return ResponseEntity.ok("Login efetuado com sucesso");
+        var token = tokenService.gerarToken(usuario);
+
+        return ResponseEntity.ok(token);
     }
 
 }
