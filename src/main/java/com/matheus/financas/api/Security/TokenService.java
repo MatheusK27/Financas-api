@@ -3,7 +3,7 @@ package com.matheus.financas.api.Security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.matheus.financas.api.dominio.Usuario;
+import com.matheus.financas.api.dominio.usuario.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

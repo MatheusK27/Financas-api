@@ -1,8 +1,8 @@
 package com.matheus.financas.api.Controller;
 
 
-import com.matheus.financas.api.dominio.DadosAutentificacaoLogin;
-import com.matheus.financas.api.dominio.UsuarioRepository;
+import com.matheus.financas.api.dominio.login.DadosAutentificacaoLogin;
+import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
 import com.matheus.financas.api.Security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
