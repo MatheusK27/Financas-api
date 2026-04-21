@@ -27,7 +27,7 @@ public class TokenService {
 
     public String getSubject(String tokenJWT){
         return  JWT.require(Algorithm.HMAC256(secret))
-                .withIssuer("financas- api")
+                .withIssuer("financas-api")
                 .build()
                 .verify(tokenJWT)
                 .getSubject();

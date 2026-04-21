@@ -33,30 +33,29 @@ public class Transacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public Transacao(String descricao, BigDecimal valor, LocalDate data, TipoTransacao tipo, Usuario usuario) {
-    this.descricao = descricao;
-    this.valor = valor;
-    this.data = data;
-    this.tipo = tipo;
-    this.usuario = usuario;
+    public Transacao(DadosCadastroTransacao dados, Usuario usuario) {
+        this.usuario = usuario;
+        this.data = dados.data();
+        this.descricao = dados.descricao();
+        this.tipo = dados.tipo();
+        this.valor = dados.valor();
+    }
 
-}
 
-   public void atualizarTransacao(DadosAtualizarTransacao dados){
-        if(descricao != null){
-            this.descricao= descricao;
+    public void  atualizarTransacao(DadosAtualizarTransacao dados){
+        if (dados.descricao()!=null){
+            this.descricao = dados.descricao();
         }
-
-        if(valor != null){
-            this.valor = valor;
+        if (dados.valor()!=null){
+            this.valor = dados.valor();
 
         }
-        if(data != null){
-            this.data = data;
+        if (dados.data()!=null){
+            this.data = dados.data();
         }
-        if(tipo != null){
-            this.tipo = tipo;
+        if (dados.tipo()!=null){
+            this.tipo = dados.tipo();
         }
    }
-   
+
 }

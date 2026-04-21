@@ -1,10 +1,12 @@
 package com.matheus.financas.api.dominio.usuario;
 
+import com.matheus.financas.api.dominio.transacao.Transacao;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class Usuario implements UserDetails{
         this.senha = dados.senha();
 
     }
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Transacao> transacoes = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -35,6 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             var authentication = new UsernamePasswordAuthenticationToken(usuario,null, usuario.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }catch (Exception e){
+                System.out.println("Erro ao validar token: " + e.getMessage());
             }
         }
 
@@ -45,7 +46,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String recuperarToken(HttpServletRequest request){
         var authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null) {
-            return  authorizationHeader.replace("Bearer ", "");
+            return  authorizationHeader.replace("Bearer ", "").trim();
         }
         return null;
     }
