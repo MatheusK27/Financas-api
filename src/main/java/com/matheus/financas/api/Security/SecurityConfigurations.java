@@ -1,6 +1,8 @@
 package com.matheus.financas.api.Security;
 
 
+import com.matheus.financas.api.infra.Exception.TratadorErro401;
+import com.matheus.financas.api.infra.Exception.TratadorErro403;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,16 +23,19 @@ public class SecurityConfigurations {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, TratadorErro401 tratadorErro401, TratadorErro403 tratadorErro403) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/usuarios", "/usuarios/**", "/login", "/login/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/swagger-ui.html").permitAll()
                         .requestMatchers("/transacoes").authenticated()
                         .anyRequest().authenticated()
                 )
+                .exceptionHandling(ex-> ex
+                        .authenticationEntryPoint(tratadorErro401)
+                        .accessDeniedHandler(tratadorErro403))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

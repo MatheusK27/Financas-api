@@ -1,10 +1,10 @@
 package com.matheus.financas.api.dominio.transacao;
 
 
-import com.matheus.financas.api.TipoTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,13 +21,13 @@ public class Transacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
-
     private BigDecimal valor;
-
     private LocalDate data;
-
     @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    @Enumerated(EnumType.STRING)
+    private CategoriaTransacao categoria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
@@ -39,6 +39,7 @@ public class Transacao {
         this.descricao = dados.descricao();
         this.tipo = dados.tipo();
         this.valor = dados.valor();
+        this.categoria=dados.categoria();
     }
 
 
@@ -55,6 +56,9 @@ public class Transacao {
         }
         if (dados.tipo()!=null){
             this.tipo = dados.tipo();
+        }
+        if (dados.categoria()!=null){
+            this.categoria=dados.categoria();
         }
    }
 

@@ -1,8 +1,9 @@
 package com.matheus.financas.api.dominio.transacao;
 
-import com.matheus.financas.api.TipoTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
-import org.hibernate.validator.constraints.ParameterScriptAssert;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
-    List<Transacao> findAllByUsuario(Usuario usuario);
+    Page<Transacao> findAllByUsuario(Usuario usuario, Pageable pageable);
 
 
     Optional<Transacao> findByIdAndUsuario(Long Id, Usuario usuario);
@@ -40,4 +41,24 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
                                        @Param("tipo") TipoTransacao tipo,
                                        @Param("mes") int mes,
                                        @Param("ano") int ano);
+
+
+
+
+
+    List<Transacao> findAllByUsuarioAndDataBetween(Usuario usuario, LocalDate dataInicio, LocalDate dataFim);
+
+    List<Transacao> findAllByUsuarioAndDataBetweenAndTipo(Usuario usuario, LocalDate dataInicio, LocalDate dataFim, TipoTransacao tipo);
+
+    @Query("""
+            SELECT  t.categoria, SUM(t.valor)
+            FROM Transacao t
+            WHERE t.usuario= :usuario
+            AND t.tipo = 'DESPESA' 
+            AND t.data  BETWEEN :dataInicio AND :dataFim
+            GROUP BY t.categoria                               
+                        """)
+    List<Object[]> resumoPorCategoria(@Param("usuario") Usuario usuario,
+                                   @Param("dataInicio") LocalDate dataInicio,
+                                   @Param("dataFim") LocalDate dataFim);
 }

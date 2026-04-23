@@ -1,4 +1,4 @@
-package com.matheus.financas.api;
+package com.matheus.financas.api.dominio.transacao;
 
 public enum TipoTransacao {
 
