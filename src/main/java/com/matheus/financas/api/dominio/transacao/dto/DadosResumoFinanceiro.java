@@ -1,4 +1,4 @@
-package com.matheus.financas.api.dominio.transacao;
+package com.matheus.financas.api.dominio.transacao.dto;
 
 import java.math.BigDecimal;
 

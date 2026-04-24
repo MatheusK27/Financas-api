@@ -1,10 +1,12 @@
 package com.matheus.financas.api.Controller;
 
 
-import com.matheus.financas.api.dominio.transacao.TipoTransacao;
-import com.matheus.financas.api.dominio.transacao.*;
+import com.matheus.financas.api.dominio.transacao.dto.*;
+import com.matheus.financas.api.dominio.transacao.repository.TransacaoRepository;
+import com.matheus.financas.api.dominio.transacao.tipo.TipoTransacao;
+import com.matheus.financas.api.dominio.transacao.entidade.Transacao;
+import com.matheus.financas.api.dominio.transacao.tipo.CategoriaTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
-import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -157,6 +159,28 @@ public class TransacaoController {
                 .toList();
 
         return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<DadosDashboard> dashboard(@AuthenticationPrincipal Usuario usuario){
+        var totalReceitas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.RECEITA);
+        var totalDespesas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.DESPESA);
+
+        var saldo= totalReceitas.subtract(totalDespesas);
+        var maiorDepesa= transacaoRepository.maiorDepesa(usuario);
+        var quantidadeTransacoes= transacaoRepository.countByUsuario(usuario);
+        var transacaoMaior= transacaoRepository.buscarMaiorDespesa(usuario);
+
+        DadosMaiorDepesa maiorDespesa= null;
+        if(transacaoMaior!=null){
+            maiorDespesa= new DadosMaiorDepesa(transacaoMaior.getDescricao(),transacaoMaior.getValor());
+        }
+
+
+        var dados=  new DadosDashboard(totalReceitas,totalDespesas,saldo,maiorDepesa,maiorDespesa,quantidadeTransacoes);
+
+        return ResponseEntity.ok(dados);
+
     }
 
         }

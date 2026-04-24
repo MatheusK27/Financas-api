@@ -1,4 +1,4 @@
-package com.matheus.financas.api.dominio.transacao;
+package com.matheus.financas.api.dominio.transacao.tipo;
 
 public enum CategoriaTransacao {
 
@@ -7,5 +7,6 @@ public enum CategoriaTransacao {
     MORADIA,
     LAZER,
     SALARIO,
+    SAUDE,
     OUTROS
 }

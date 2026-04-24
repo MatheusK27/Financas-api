@@ -1,10 +1,13 @@
-package com.matheus.financas.api.dominio.transacao;
+package com.matheus.financas.api.dominio.transacao.entidade;
 
 
+import com.matheus.financas.api.dominio.transacao.tipo.CategoriaTransacao;
+import com.matheus.financas.api.dominio.transacao.dto.DadosAtualizarTransacao;
+import com.matheus.financas.api.dominio.transacao.dto.DadosCadastroTransacao;
+import com.matheus.financas.api.dominio.transacao.tipo.TipoTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,6 +1,6 @@
 package com.matheus.financas.api.dominio.usuario;
 
-import com.matheus.financas.api.dominio.transacao.Transacao;
+import com.matheus.financas.api.dominio.transacao.entidade.Transacao;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
