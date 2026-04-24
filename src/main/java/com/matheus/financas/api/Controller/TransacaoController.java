@@ -167,7 +167,6 @@ public class TransacaoController {
         var totalDespesas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.DESPESA);
 
         var saldo= totalReceitas.subtract(totalDespesas);
-        var maiorDepesa= transacaoRepository.maiorDepesa(usuario);
         var quantidadeTransacoes= transacaoRepository.countByUsuario(usuario);
         var transacaoMaior= transacaoRepository.buscarMaiorDespesa(usuario);
 
@@ -177,7 +176,7 @@ public class TransacaoController {
         }
 
 
-        var dados=  new DadosDashboard(totalReceitas,totalDespesas,saldo,maiorDepesa,maiorDespesa,quantidadeTransacoes);
+        var dados=  new DadosDashboard(totalReceitas,totalDespesas,saldo,maiorDespesa,quantidadeTransacoes);
 
         return ResponseEntity.ok(dados);
 

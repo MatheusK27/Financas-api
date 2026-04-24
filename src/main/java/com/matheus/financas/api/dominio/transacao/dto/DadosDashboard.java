@@ -7,7 +7,6 @@ public record DadosDashboard(
         BigDecimal totalReceitas,
         BigDecimal totalDespesas,
         BigDecimal saldo,
-        BigDecimal maiorDespesa,
         DadosMaiorDepesa dados,
         Long quantidadeTransacao
 ) {
