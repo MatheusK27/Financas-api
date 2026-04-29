@@ -23,7 +23,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao>  findAllByUsuarioAndTipo(Usuario usuario, TipoTransacao tipoTransacao);
 
-    @Query("""
+    @Query("""  
         select coalesce(sum(t.valor), 0)
         from Transacao t
         where t.usuario = :usuario

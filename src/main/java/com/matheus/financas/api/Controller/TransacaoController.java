@@ -1,12 +1,14 @@
 package com.matheus.financas.api.Controller;
 
 
+import com.matheus.financas.api.Service.TransacaoService;
 import com.matheus.financas.api.dominio.transacao.dto.*;
 import com.matheus.financas.api.dominio.transacao.repository.TransacaoRepository;
 import com.matheus.financas.api.dominio.transacao.tipo.TipoTransacao;
 import com.matheus.financas.api.dominio.transacao.entidade.Transacao;
 import com.matheus.financas.api.dominio.transacao.tipo.CategoriaTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
+import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -32,6 +34,9 @@ public class TransacaoController {
 
     @Autowired
     private TransacaoRepository transacaoRepository;
+
+    @Autowired
+    private TransacaoService service;
 
 
 
@@ -72,55 +77,39 @@ public class TransacaoController {
     }
 
     @GetMapping("/despesas")
-    public ResponseEntity<List<DadosDetalhamentoTransacao>> listarDespesas(@AuthenticationPrincipal Usuario usuarioLogado){
-        var lista = transacaoRepository.findAllByUsuarioAndTipo(usuarioLogado, TipoTransacao.DESPESA)
-                .stream()
-                .map(DadosDetalhamentoTransacao::new)
-                .toList();
-        return ResponseEntity.ok(lista);
+    public ResponseEntity listarDespesas(@AuthenticationPrincipal Usuario usuarioLogado){
+        return ResponseEntity.ok(service.listarDespesas(usuarioLogado));
     }
 
     @GetMapping("/receitas")
     public ResponseEntity<List<DadosDetalhamentoTransacao>> listarReceitas(@AuthenticationPrincipal Usuario usuarioLogado){
-        var lista = transacaoRepository.findAllByUsuarioAndTipo(usuarioLogado, TipoTransacao.RECEITA)
-                .stream()
-                .map(DadosDetalhamentoTransacao::new)
-                .toList();
-
-        return ResponseEntity.ok(lista);
+         return ResponseEntity.ok(service.listarReceitas(usuarioLogado));
 
     }
 
     @GetMapping("/resumo")
     public ResponseEntity<DadosResumoFinanceiro> resumoGeral(@AuthenticationPrincipal Usuario usuario){
-        var totalDespesas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.DESPESA);
-        var totalReceitas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.RECEITA);
-        var saldo= totalReceitas.subtract(totalDespesas);
-
-        return ResponseEntity.ok(
-                new DadosResumoFinanceiro(totalReceitas,totalDespesas, saldo));
+      return ResponseEntity.ok(service.resumoGeral(usuario));
     }
+
+
 
     @Operation(summary = "Resumo financeiro mensal usuário logado")
     @GetMapping("/resumo/{ano}/{mes}")
     public ResponseEntity<DadosResumoFinanceiro>  resumoGeralMes(@AuthenticationPrincipal Usuario usuario,
                                                                  @PathVariable int mes,
                                                                  @PathVariable int ano){
-        var totalDespesas= transacaoRepository.somarPorUsuarioTipoEMes(usuario, TipoTransacao.DESPESA,mes,ano);
-        var totalReceitas= transacaoRepository.somarPorUsuarioTipoEMes(usuario,TipoTransacao.RECEITA,mes, ano);
-        var saldo= totalReceitas.subtract(totalDespesas);
-
-        return ResponseEntity.ok(
-                new DadosResumoFinanceiro(totalReceitas, totalDespesas, saldo));
+       return ResponseEntity.ok(service.resumoGeralMes(usuario,mes,ano));
     }
+
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoTransacao> detalharPorId(
             @PathVariable Long id,
             @AuthenticationPrincipal Usuario usuarioLogado){
-        var transacao= transacaoRepository.findByIdAndUsuario(id,usuarioLogado)
-                .orElseThrow(()-> new EntityNotFoundException("Transação não encontrada"));
-        return ResponseEntity.ok(new DadosDetalhamentoTransacao(transacao));
+        return ResponseEntity.ok(service.detalharPorId(id,usuarioLogado));
 
 
     }
@@ -132,14 +121,7 @@ public class TransacaoController {
             @RequestParam LocalDate dataInicio,
             @RequestParam LocalDate dataFim,
             @RequestParam (required = false) TipoTransacao tipo){
-        List<Transacao>transacaos;
-        if(tipo!=null){
-            transacaos= transacaoRepository.findAllByUsuarioAndDataBetweenAndTipo(usuarioLogado, dataInicio, dataFim, tipo);
-        }else {
-            transacaos= transacaoRepository.findAllByUsuarioAndDataBetween(usuarioLogado, dataInicio, dataFim);
-        }
-        var lista = transacaos.stream().map(DadosDetalhamentoTransacao::new).toList();
-        return ResponseEntity.ok(lista);
+    return ResponseEntity.ok(service.filtrar(usuarioLogado,dataInicio,dataFim,tipo));
 
     }
 
@@ -148,38 +130,12 @@ public class TransacaoController {
             @AuthenticationPrincipal Usuario usuario,
             @RequestParam LocalDate dataInicio,
             @RequestParam LocalDate dataFim) {
-
-        var resultado = transacaoRepository.resumoPorCategoria(usuario, dataInicio, dataFim);
-
-        var lista = resultado.stream()
-                .map(obj -> new DadosResumoCategoria(
-                        (CategoriaTransacao) obj[0],
-                        (BigDecimal) obj[1]
-                ))
-                .toList();
-
-        return ResponseEntity.ok(lista);
+     return ResponseEntity.ok(service.resumoPorCategoria(usuario,dataInicio,dataFim));
     }
 
     @GetMapping("/dashboard")
     public ResponseEntity<DadosDashboard> dashboard(@AuthenticationPrincipal Usuario usuario){
-        var totalReceitas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.RECEITA);
-        var totalDespesas= transacaoRepository.somarPorUsuarioETipo(usuario,TipoTransacao.DESPESA);
-
-        var saldo= totalReceitas.subtract(totalDespesas);
-        var quantidadeTransacoes= transacaoRepository.countByUsuario(usuario);
-        var transacaoMaior= transacaoRepository.buscarMaiorDespesa(usuario);
-
-        DadosMaiorDepesa maiorDespesa= null;
-        if(transacaoMaior!=null){
-            maiorDespesa= new DadosMaiorDepesa(transacaoMaior.getDescricao(),transacaoMaior.getValor());
-        }
-
-
-        var dados=  new DadosDashboard(totalReceitas,totalDespesas,saldo,maiorDespesa,quantidadeTransacoes);
-
-        return ResponseEntity.ok(dados);
-
+    return ResponseEntity.ok(service.dashboard(usuario));
     }
 
         }

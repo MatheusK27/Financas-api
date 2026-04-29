@@ -45,6 +45,15 @@ public class Transacao {
         this.categoria=dados.categoria();
     }
 
+    public Transacao(String descricao, BigDecimal valor, LocalDate data, TipoTransacao tipoTransacao, Usuario usuario) {
+        this.descricao = descricao;
+        this.valor = valor;
+        this.data = data;
+        this.tipo = tipoTransacao;
+        this.usuario = usuario;
+
+    }
+
 
     public void  atualizarTransacao(DadosAtualizarTransacao dados){
         if (dados.descricao()!=null){
