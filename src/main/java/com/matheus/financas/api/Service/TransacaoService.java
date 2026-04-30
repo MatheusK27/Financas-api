@@ -88,14 +88,14 @@ public class TransacaoService {
         var totalDespesas=repository.somarPorUsuarioETipo(usuario, TipoTransacao.DESPESA);
         var total= totalReceitas.subtract(totalDespesas);
         var quantidadeTransacao= repository.countByUsuario(usuario);
-        var maiorTransacao= repository.buscarMaiorDespesa(usuario);
+        var maiorDespesa= repository.buscarMaiorDespesa(usuario);
+        DadosMaiorDepesa dadosMaiorDepesa= null;
 
-        DadosMaiorDepesa maiorDespesa= null;
-        if(maiorTransacao !=null){
-            maiorDespesa= new DadosMaiorDepesa(maiorTransacao.getDescricao(), maiorTransacao.getValor());
+        if(maiorDespesa !=null){
+            dadosMaiorDepesa= new DadosMaiorDepesa(maiorDespesa.getDescricao(),maiorDespesa.getValor());
 
         }
-        var dados= new DadosDashboard(totalReceitas,totalDespesas,total,maiorDespesa,quantidadeTransacao);
+        var dados= new DadosDashboard(totalReceitas,totalDespesas,total,dadosMaiorDepesa,quantidadeTransacao);
         return dados;
 
     }
