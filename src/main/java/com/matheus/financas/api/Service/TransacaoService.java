@@ -86,7 +86,7 @@ public class TransacaoService {
     public DadosDashboard dashboard(Usuario usuario){
         var totalReceitas= repository.somarPorUsuarioETipo(usuario, TipoTransacao.RECEITA);
         var totalDespesas=repository.somarPorUsuarioETipo(usuario, TipoTransacao.DESPESA);
-        var total= totalReceitas.subtract(totalDespesas);
+        var saldo= totalReceitas.subtract(totalDespesas);
         var quantidadeTransacao= repository.countByUsuario(usuario);
         var maiorDespesa= repository.buscarMaiorDespesa(usuario);
         DadosMaiorDepesa dadosMaiorDepesa= null;
@@ -95,7 +95,7 @@ public class TransacaoService {
             dadosMaiorDepesa= new DadosMaiorDepesa(maiorDespesa.getDescricao(),maiorDespesa.getValor());
 
         }
-        var dados= new DadosDashboard(totalReceitas,totalDespesas,total,dadosMaiorDepesa,quantidadeTransacao);
+        var dados= new DadosDashboard(totalReceitas,totalDespesas,saldo,dadosMaiorDepesa,quantidadeTransacao);
         return dados;
 
     }

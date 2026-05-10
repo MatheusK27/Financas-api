@@ -6,11 +6,10 @@ import com.matheus.financas.api.dominio.transacao.dto.*;
 import com.matheus.financas.api.dominio.transacao.repository.TransacaoRepository;
 import com.matheus.financas.api.dominio.transacao.tipo.TipoTransacao;
 import com.matheus.financas.api.dominio.transacao.entidade.Transacao;
-import com.matheus.financas.api.dominio.transacao.tipo.CategoriaTransacao;
 import com.matheus.financas.api.dominio.usuario.Usuario;
-import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.persistence.EntityNotFoundException;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,13 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.math.BigDecimal;
+
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
 
-
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/transacoes")
 public class TransacaoController {

@@ -23,7 +23,7 @@ public class TokenService {
 
 
     public String gerarToken(Usuario usuario){
-      
+
         return  JWT.create()
                 .withIssuer("financas-api")
                 .withSubject(usuario.getEmail())
