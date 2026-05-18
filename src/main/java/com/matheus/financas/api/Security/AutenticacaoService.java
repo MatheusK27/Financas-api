@@ -1,6 +1,6 @@
 package com.matheus.financas.api.Security;
 
-import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
+import com.matheus.financas.api.dominio.transacao.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

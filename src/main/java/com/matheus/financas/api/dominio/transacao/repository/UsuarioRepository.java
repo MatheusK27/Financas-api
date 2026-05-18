@@ -1,5 +1,6 @@
-package com.matheus.financas.api.dominio.usuario;
+package com.matheus.financas.api.dominio.transacao.repository;
 
+import com.matheus.financas.api.dominio.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

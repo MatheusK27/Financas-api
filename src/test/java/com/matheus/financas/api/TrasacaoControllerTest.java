@@ -6,7 +6,7 @@ import com.matheus.financas.api.Service.TransacaoService;
 import com.matheus.financas.api.dominio.transacao.dto.DadosDashboard;
 import com.matheus.financas.api.dominio.transacao.dto.DadosMaiorDepesa;
 import com.matheus.financas.api.dominio.transacao.repository.TransacaoRepository;
-import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
+import com.matheus.financas.api.dominio.transacao.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import com.matheus.financas.api.Security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.matheus.financas.api.Controller;
 
 import com.matheus.financas.api.dominio.usuario.DadosCadastroUsuario;
 import com.matheus.financas.api.dominio.usuario.Usuario;
-import com.matheus.financas.api.dominio.usuario.UsuarioRepository;
+import com.matheus.financas.api.dominio.transacao.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
